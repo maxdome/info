@@ -1,0 +1,15 @@
+{
+  "name": "mxd-info",
+  "description": "Provide info routes for debugging",
+  "version": "1.0.0",
+  "homepage": "http://github.com/maxdome/info",
+  "readmeFilename": "README.md",
+  "main": "src/lib.js",
+  "dependencies": {
+    "lodash": "^4.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxdome/info.git"
+  }
+}
