@@ -36,8 +36,8 @@ function getSummary(config, packageJson, version, summarize) {
     const dependency = packageJson.dependencies[dependencyKey];
     summary.dependencies[dependencyKey] = dependency.split('#')[1] || dependency;
   }
-  if (config.logging) {
-    summary.logging = config.logging
+  if (config.logging && config.logging.transports) {
+    summary.logging = config.logging.transports
       .filter(function(transport) {
         return transport.type === 'File';
       })
