@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const fs = require('fs');
 
 function getConfig(config) {
   config = _.cloneDeep(config);
@@ -22,7 +23,11 @@ function getVersion(packageJson) {
   let version = packageJson.version;
   try {
     version += '-' + fs.readFileSync(process.cwd() + '/REVISION', 'utf-8');
-  } catch (e) {}
+  } catch (e) {
+    if (e.code !== 'ENOENT') {
+      throw e;
+    }
+  }
   return version;
 }
 
