@@ -12,6 +12,14 @@ require('mxd-info')(config)(app, summarize);
 
 List of JSON paths of the config which will be disguised for the ```/info/config```
 
+## environment variables
+
+If environment variables are set, the config object will be ignored!
+
+* MXD_INFO: JSON encodet list of JSON paths
+
+## config object
+
 ```
 {
   "info": []
