@@ -21,7 +21,7 @@ List of JSON paths of the config which will be disguised for the ```/info/config
 
 # routes
 
+* ```/info``` and ```/info/summary```: response the summary with the most important information
 * ```/info/config```: response the config
 * ```/info/package```: response the ```package.json```
-* ```/info/summary```: response the summary with the most important information
 * ```/info/version```: response the version with the revision

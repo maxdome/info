@@ -77,7 +77,9 @@ module.exports = (config) => (app, summarize) => {
   });
 
   const summary = getSummary(config, packageJson, version, summarize);
-  app.get('/info/summary', (req, res) => {
+  const summaryController = (req, res) => {
     res.send(summary);
-  });
+  };
+  app.get('/info', summaryController);
+  app.get('/info/summary', summaryController);
 };
