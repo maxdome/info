@@ -10,7 +10,7 @@ require('mxd-info')(config)(app, summarize);
 
 # config
 
-List of JSON paths of the config which will be disguised for the ```/info/config```
+List of JSON paths of the info (config and package) which will be disguised for the ```/info/config``` and ```/info/package```
 
 ## environment variables
 

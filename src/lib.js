@@ -3,24 +3,24 @@
 const _ = require('lodash');
 const fs = require('fs');
 
-function getConfig(config) {
-  config = _.cloneDeep(config);
-  if (config.info) {
-    for (const path of config.info) {
-      if (_.has(config, path)) {
-        _.set(config, path, '******');
+function disguiseInfo(info) {
+  info = _.cloneDeep(info);
+  if (info.config.info) {
+    for (const path of info.config.info) {
+      if (_.has(info, path)) {
+        _.set(info, path, '******');
       }
     }
   }
-  return config;
+  return info;
 }
 
 function getPackage() {
   return require(process.cwd() + '/package.json');
 }
 
-function getVersion(packageJson) {
-  let version = packageJson.version;
+function getVersion(info) {
+  let version = info.package.version;
   try {
     version += '-' + fs.readFileSync(process.cwd() + '/REVISION', 'utf-8');
   } catch (e) {
@@ -31,18 +31,18 @@ function getVersion(packageJson) {
   return version;
 }
 
-function getSummary(config, packageJson, version, summarize) {
+function getSummary(info, version, summarize) {
   const summary = {
     version,
     dependencies: {}
   };
-  const dependencyKeys = Object.keys(packageJson.dependencies).filter(key => key.startsWith('mxd-'));
+  const dependencyKeys = Object.keys(info.package.dependencies).filter(key => key.startsWith('mxd-'));
   for (const dependencyKey of dependencyKeys) {
-    const dependency = packageJson.dependencies[dependencyKey];
+    const dependency = info.package.dependencies[dependencyKey];
     summary.dependencies[dependencyKey] = dependency.split('#')[1] || dependency;
   }
-  if (config.logging && config.logging.transports) {
-    summary.logging = config.logging.transports
+  if (info.config.logging && info.config.logging.transports) {
+    summary.logging = info.config.logging.transports
       .filter(function(transport) {
         return transport.type === 'File';
       })
@@ -61,22 +61,26 @@ module.exports = (config) => (app, summarize) => {
     config.info = JSON.parse(process.env.MXD_INFO);
   }
 
-  const disguisedConfig = getConfig(config);
+  const info = {
+    config,
+    package: getPackage()
+  };
+  const disguisedInfo = disguiseInfo(info);
+
   app.get('/info/config', (req, res) => {
-    res.send(disguisedConfig);
+    res.send(disguisedInfo.config);
   });
 
-  const packageJson = getPackage();
   app.get('/info/package', (req, res) => {
-    res.send(packageJson);
+    res.send(disguisedInfo.package);
   });
 
-  const version = getVersion(packageJson);
+  const version = getVersion(info);
   app.get('/info/version', (req, res) => {
     res.send(version);
   });
 
-  const summary = getSummary(config, packageJson, version, summarize);
+  const summary = getSummary(info, version, summarize);
   const summaryController = (req, res) => {
     res.send(summary);
   };

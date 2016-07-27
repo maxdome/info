@@ -1,7 +1,7 @@
 {
   "name": "mxd-info",
   "description": "Provide info routes for debugging",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "homepage": "http://github.com/maxdome/info",
   "readmeFilename": "README.md",
   "main": "src/lib.js",
