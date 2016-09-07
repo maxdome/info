@@ -10,6 +10,12 @@ function disguiseInfo(info) {
       if (_.has(info, path)) {
         _.set(info, path, '******');
       }
+      if (path.indexOf('config')) {
+        const propertiesPath = path.replace('config', 'properties');
+        if (_.has(info, propertiesPath)) {
+          _.set(info, propertiesPath, '******');
+        }
+      }
     }
   }
   return info;
@@ -17,6 +23,14 @@ function disguiseInfo(info) {
 
 function getPackage() {
   return require(process.cwd() + '/package.json');
+}
+
+function getProperties() {
+  let properties = {};
+  try {
+    properties = require(process.cwd() + '/config/properties.json');
+  } catch (e) {}
+  return properties;
 }
 
 function getVersion(info) {
@@ -63,7 +77,8 @@ module.exports = (config) => (app, summarize) => {
 
   const info = {
     config,
-    package: getPackage()
+    package: getPackage(),
+    properties: getProperties()
   };
   const disguisedInfo = disguiseInfo(info);
 
@@ -73,6 +88,10 @@ module.exports = (config) => (app, summarize) => {
 
   app.get('/info/package', (req, res) => {
     res.send(disguisedInfo.package);
+  });
+
+  app.get('/info/properties', (req, res) => {
+    res.send(disguisedInfo.properties);
   });
 
   const version = getVersion(info);
