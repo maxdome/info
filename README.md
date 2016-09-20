@@ -3,8 +3,10 @@
 Use optionally the summarize function to add more information to the `/info/summary`
 
 ```
-const summarize = (summary) => {};
-require('mxd-info')(config)(app, summarize);
+const info = require('mxd-info')(config, app);
+
+const summarize = summary => {};
+info(summarize); 
 ```
 
 
