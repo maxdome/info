@@ -70,7 +70,7 @@ function getSummary(info, version, summarize) {
   return summary;
 }
 
-module.exports = (config) => (app, summarize) => {
+module.exports = (config, app) => {
   if (process.env.MXD_INFO) {
     config.info = JSON.parse(process.env.MXD_INFO);
   }
@@ -99,10 +99,14 @@ module.exports = (config) => (app, summarize) => {
     res.send(version);
   });
 
-  const summary = getSummary(info, version, summarize);
+  let summary = getSummary(info, version);
   const summaryController = (req, res) => {
     res.send(summary);
   };
   app.get('/info', summaryController);
   app.get('/info/summary', summaryController);
+
+  return summarize => {
+    summary = getSummary(info, version, summarize);
+  };
 };
