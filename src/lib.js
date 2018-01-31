@@ -10,7 +10,7 @@ function disguiseInfo(info) {
       if (_.has(info, path)) {
         _.set(info, path, '******');
       }
-      if (path.indexOf('config')) {
+      if (path.indexOf('config') !== -1) {
         const propertiesPath = path.replace('config', 'properties');
         if (_.has(info, propertiesPath)) {
           _.set(info, propertiesPath, '******');
